@@ -28,7 +28,7 @@ const ACTIONS = ['LOGIN', 'REFRESH', 'REVOKE', 'ROLE_ASSIGN', 'REGISTER']
 
 export function AuditLogs() {
   const [search, setSearch] = useState('')
-  const [actionFilter, setActionFilter] = useState<string>('')
+  const [actionFilter, setActionFilter] = useState<string>('all')
   const [page, setPage] = useState(1)
   const limit = 50
 
@@ -38,7 +38,7 @@ export function AuditLogs() {
       apiClient.getAuditLogs({
         page,
         limit,
-        action: actionFilter || undefined,
+        action: actionFilter === 'all' ? undefined : actionFilter,
       }),
   })
 
@@ -118,7 +118,7 @@ export function AuditLogs() {
               <SelectValue placeholder="All actions" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All actions</SelectItem>
+              <SelectItem value="all">All actions</SelectItem>
               {ACTIONS.map((action) => (
                 <SelectItem key={action} value={action}>
                   {action}
