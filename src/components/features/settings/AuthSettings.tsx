@@ -442,15 +442,11 @@ export function AuthSettingsList() {
                                         else setSelectedApp({app, settings});
                                     }}
                                 >
-                                    <DialogTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            className="w-full"
-                                            onClick={() => setSelectedApp({app, settings})}
-                                        >
+                                    <DialogTrigger>
+                                        <div onClick={() => setSelectedApp({app, settings})}>
                                             <Settings2 className="mr-2 h-4 w-4"/>
                                             Configure Auth
-                                        </Button>
+                                        </div>
                                     </DialogTrigger>
                                     <DialogContent className="max-h-[90vh] overflow-y-auto max-w-2xl">
                                         <DialogHeader>

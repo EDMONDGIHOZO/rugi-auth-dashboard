@@ -1,7 +1,12 @@
 import {useState} from "react";
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {apiClient} from "@/lib/api";
-import {App, EmailConfig, CreateEmailConfigRequest, UpdateEmailConfigRequest} from "@/types";
+import {
+    App,
+    EmailConfig,
+    CreateEmailConfigRequest,
+    UpdateEmailConfigRequest,
+} from "@/types";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {
@@ -10,7 +15,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
@@ -21,10 +25,10 @@ import {useForm, Controller} from "react-hook-form";
 import {Checkbox} from "@/components/ui/checkbox";
 
 function EmailConfigForm({
-                              app,
-                              config,
-                              onClose,
-                          }: {
+                             app,
+                             config,
+                             onClose,
+                         }: {
     app: App;
     config?: EmailConfig;
     onClose: () => void;
@@ -44,7 +48,7 @@ function EmailConfigForm({
             smtpPort: config?.smtpPort ?? 587,
             smtpSecure: config?.smtpSecure ?? false,
             smtpUser: config?.smtpUser ?? "",
-            smtpPassword: "", // Don't populate password for security
+            smtpPassword: "",
             fromEmail: config?.fromEmail ?? "",
             fromName: config?.fromName ?? "Rugi Auth",
             enabled: config?.enabled ?? true,
@@ -119,7 +123,7 @@ function EmailConfigForm({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
                 <h3 className="text-lg font-medium">SMTP Configuration</h3>
-                
+
                 <div className="grid gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="smtpHost">SMTP Host *</Label>
@@ -145,7 +149,9 @@ function EmailConfigForm({
 
                     <div className="flex items-center justify-between rounded-lg border p-4">
                         <div className="space-y-0.5">
-                            <Label className="text-base">Use Secure Connection (TLS/SSL)</Label>
+                            <Label className="text-base">
+                                Use Secure Connection (TLS/SSL)
+                            </Label>
                             <p className="text-sm text-muted-foreground">
                                 Enable for port 465 (SSL) or 587 (TLS)
                             </p>
@@ -166,7 +172,9 @@ function EmailConfigForm({
                         <Label htmlFor="smtpUser">SMTP Username *</Label>
                         <Input
                             id="smtpUser"
-                            {...register("smtpUser", {required: "SMTP Username is required"})}
+                            {...register("smtpUser", {
+                                required: "SMTP Username is required",
+                            })}
                             placeholder="your-email@gmail.com"
                         />
                     </div>
@@ -181,7 +189,9 @@ function EmailConfigForm({
                             {...register("smtpPassword", {
                                 required: !isEditing ? "SMTP Password is required" : false,
                             })}
-                            placeholder={isEditing ? "Leave blank to keep current" : "Your app password"}
+                            placeholder={
+                                isEditing ? "Leave blank to keep current" : "Your app password"
+                            }
                         />
                     </div>
                 </div>
@@ -189,7 +199,7 @@ function EmailConfigForm({
 
             <div className="space-y-4">
                 <h3 className="text-lg font-medium">Email Settings</h3>
-                
+
                 <div className="grid gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="fromEmail">From Email *</Label>
@@ -256,16 +266,6 @@ export function EmailConfigList() {
 
     const apps = appsData?.data || [];
 
-    // Fetch email config for each app
-    const emailConfigQueries = apps.map((app) => ({
-        queryKey: ["email-config", app.id],
-        queryFn: () => apiClient.getEmailConfig(app.id),
-        enabled: apps.length > 0,
-    }));
-
-    // We'll fetch configs individually as needed when opening the dialog
-    // For now, we'll show a loading state when needed
-
     if (isLoadingApps) {
         return (
             <div className="flex h-48 items-center justify-center">
@@ -319,33 +319,24 @@ export function EmailConfigList() {
 }
 
 function EmailConfigCard({
-    app,
-    onSelect,
-}: {
+                             app,
+                             onSelect,
+                         }: {
     app: App;
     onSelect: (config?: EmailConfig) => void;
 }) {
     const {data: config, isLoading} = useQuery({
         queryKey: ["email-config", app.id],
         queryFn: () => apiClient.getEmailConfig(app.id),
-        retry: false, // Don't retry on 404
-        onError: (error: any) => {
-            // 404 is expected if config doesn't exist
-            if (error.response?.status !== 404) {
-                console.error("Error fetching email config:", error);
-            }
-        },
+        retry: false,
     });
 
     const isConfigured = !!config && !isLoading;
-    const hasError = !isLoading && !config;
 
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                    {app.name}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">{app.name}</CardTitle>
                 {isLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin text-muted-foreground"/>
                 ) : isConfigured ? (
@@ -364,7 +355,9 @@ function EmailConfigCard({
                 {isConfigured && (
                     <div className="text-xs text-muted-foreground mb-4 space-y-1">
                         <p>From: {config.fromEmail}</p>
-                        <p>Host: {config.smtpHost}:{config.smtpPort}</p>
+                        <p>
+                            Host: {config.smtpHost}:{config.smtpPort}
+                        </p>
                     </div>
                 )}
                 <Button
@@ -381,9 +374,9 @@ function EmailConfigCard({
 }
 
 function EmailConfigFormLoader({
-    app,
-    onClose,
-}: {
+                                   app,
+                                   onClose,
+                               }: {
     app: App;
     onClose: () => void;
 }) {
@@ -391,12 +384,6 @@ function EmailConfigFormLoader({
         queryKey: ["email-config", app.id],
         queryFn: () => apiClient.getEmailConfig(app.id),
         retry: false,
-        onError: (error: any) => {
-            // 404 is expected if config doesn't exist
-            if (error.response?.status !== 404) {
-                console.error("Error fetching email config:", error);
-            }
-        },
     });
 
     if (isLoading) {
@@ -407,6 +394,5 @@ function EmailConfigFormLoader({
         );
     }
 
-    return <EmailConfigForm app={app} config={config} onClose={onClose} />;
+    return <EmailConfigForm app={app} config={config} onClose={onClose}/>;
 }
-
