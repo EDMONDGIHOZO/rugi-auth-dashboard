@@ -1,4 +1,4 @@
-# YebaLabs Dashboard
+# Rugi-auth dashboard
 
 A modern, responsive React-based admin dashboard for managing a centralized authentication service. Built with React 18, TypeScript, Tailwind CSS, and shadcn/ui components.
 
@@ -37,7 +37,7 @@ A modern, responsive React-based admin dashboard for managing a centralized auth
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd yebalabs-dashboard
+cd rugi-auth-dashboard
 ```
 
 2. Install dependencies:
