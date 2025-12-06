@@ -1,5 +1,6 @@
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {AuthSettingsList} from "@/components/features/settings/AuthSettings"
+import {EmailConfigList} from "@/components/features/settings/EmailConfig"
 
 export function Settings() {
     return (
@@ -12,6 +13,7 @@ export function Settings() {
             <Tabs defaultValue="authentication" className="space-y-4">
                 <TabsList>
                     <TabsTrigger value="authentication">Authentication</TabsTrigger>
+                    <TabsTrigger value="email-setup">Email Setup</TabsTrigger>
                     <TabsTrigger value="general" disabled>General</TabsTrigger>
                     <TabsTrigger value="notifications" disabled>Notifications</TabsTrigger>
                 </TabsList>
@@ -24,6 +26,17 @@ export function Settings() {
                             </p>
                         </div>
                         <AuthSettingsList/>
+                    </div>
+                </TabsContent>
+                <TabsContent value="email-setup" className="space-y-4">
+                    <div className="rounded-lg border p-6 bg-card text-card-foreground shadow-sm">
+                        <div className="mb-6">
+                            <h2 className="text-xl font-semibold">Email Configuration</h2>
+                            <p className="text-sm text-muted-foreground">
+                                Configure SMTP settings for sending emails from your applications.
+                            </p>
+                        </div>
+                        <EmailConfigList/>
                     </div>
                 </TabsContent>
                 <TabsContent value="general">

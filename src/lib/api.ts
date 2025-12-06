@@ -21,6 +21,9 @@ import type {
   CreateAuthSettingsRequest,
   UpdateAuthSettingsRequest,
   PaginationParams,
+  EmailConfig,
+  CreateEmailConfigRequest,
+  UpdateEmailConfigRequest,
 } from "@/types";
 
 const API_BASE_URL =
@@ -381,6 +384,36 @@ class ApiClient {
     const response = await this.client.get<PaginatedResponse<AuthSettings>>(
       "/auth-settings",
       { params }
+    );
+    return response.data;
+  }
+
+  // Email config methods
+  async getEmailConfig(appId: string): Promise<EmailConfig> {
+    const response = await this.client.get<EmailConfig>(
+      `/apps/${appId}/email-config`
+    );
+    return response.data;
+  }
+
+  async createEmailConfig(
+    appId: string,
+    data: CreateEmailConfigRequest
+  ): Promise<EmailConfig> {
+    const response = await this.client.post<EmailConfig>(
+      `/apps/${appId}/email-config`,
+      data
+    );
+    return response.data;
+  }
+
+  async updateEmailConfig(
+    appId: string,
+    data: UpdateEmailConfigRequest
+  ): Promise<EmailConfig> {
+    const response = await this.client.patch<EmailConfig>(
+      `/apps/${appId}/email-config`,
+      data
     );
     return response.data;
   }

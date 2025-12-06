@@ -172,3 +172,45 @@ export interface AppRolesResponse {
   };
   roles: (Role & { userCount: number })[];
 }
+
+export interface EmailConfig {
+  id: string;
+  appId: string;
+  smtpHost: string;
+  smtpPort: number;
+  smtpSecure: boolean;
+  smtpUser: string;
+  smtpPassword: string; // Always masked as "***" in GET responses
+  fromEmail: string;
+  fromName: string;
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+  app: {
+    id: string;
+    name: string;
+    clientId: string;
+  };
+}
+
+export interface CreateEmailConfigRequest {
+  smtpHost: string;
+  smtpPort: number;
+  smtpSecure: boolean;
+  smtpUser: string;
+  smtpPassword: string;
+  fromEmail: string;
+  fromName?: string; // Optional, defaults to "Rugi Auth"
+  enabled?: boolean; // Optional, defaults to true
+}
+
+export interface UpdateEmailConfigRequest {
+  smtpHost?: string;
+  smtpPort?: number;
+  smtpSecure?: boolean;
+  smtpUser?: string;
+  smtpPassword?: string;
+  fromEmail?: string;
+  fromName?: string;
+  enabled?: boolean;
+}
