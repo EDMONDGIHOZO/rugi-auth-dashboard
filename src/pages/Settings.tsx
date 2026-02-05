@@ -1,6 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AuthSettingsList } from "@/components/features/settings/AuthSettings";
 import { EmailConfigList } from "@/components/features/settings/EmailConfig";
+import { GeneralSettings } from "@/components/features/settings/GeneralSettings";
+
+// ...
+
+<TabsContent value="general">
+  <GeneralSettings />
+</TabsContent>
 
 export function Settings() {
   return (
@@ -14,6 +21,7 @@ export function Settings() {
 
       <Tabs defaultValue="authentication" className="space-y-4">
         <TabsList>
+          <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="authentication">Authentication</TabsTrigger>
           <TabsTrigger value="email-setup">Email Setup</TabsTrigger>
         </TabsList>
@@ -41,13 +49,9 @@ export function Settings() {
           </div>
         </TabsContent>
         <TabsContent value="general">
-          <div className="flex h-[400px] items-center justify-center rounded-md border border-dashed">
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">
-                General settings coming soon
-              </p>
-            </div>
-          </div>
+          <TabsContent value="general">
+            <GeneralSettings />
+          </TabsContent>
         </TabsContent>
         <TabsContent value="notifications">
           <div className="flex h-[400px] items-center justify-center rounded-md border border-dashed">

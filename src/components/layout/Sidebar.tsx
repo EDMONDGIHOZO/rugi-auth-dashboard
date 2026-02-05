@@ -1,5 +1,5 @@
-import {Link, useLocation} from "react-router-dom";
-import {cn} from "@/lib/utils";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import {
     LayoutDashboard,
     AppWindow,
@@ -9,20 +9,30 @@ import {
     Menu,
     X,
 } from "lucide-react";
-import {useState} from "react";
-import {Button} from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { apiClient } from "@/lib/api";
 
 const navigation = [
-    {name: "Dashboard", href: "/", icon: LayoutDashboard},
-    {name: "Applications", href: "/apps", icon: AppWindow},
-    {name: "Users", href: "/users", icon: Users},
-    {name: "Audit Logs", href: "/audit", icon: FileText},
-    {name: "Settings", href: "/settings", icon: Settings},
+    { name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { name: "Applications", href: "/apps", icon: AppWindow },
+    { name: "Users", href: "/users", icon: Users },
+    { name: "Audit Logs", href: "/audit", icon: FileText },
+    { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function Sidebar() {
     const location = useLocation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [projectName, setProjectName] = useState("Rugi Auth");
+
+    useEffect(() => {
+        apiClient.getMeta().then(data => {
+            setProjectName(data.projectName || "Rugi Auth");
+        }).catch(() => {
+            // Silently fail to default
+        });
+    }, []);
 
     return (
         <>
@@ -34,9 +44,9 @@ export function Sidebar() {
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
                     {mobileMenuOpen ? (
-                        <X className="h-6 w-6"/>
+                        <X className="h-6 w-6" />
                     ) : (
-                        <Menu className="h-6 w-6"/>
+                        <Menu className="h-6 w-6" />
                     )}
                 </Button>
             </div>
@@ -58,8 +68,10 @@ export function Sidebar() {
             >
                 <div className="flex h-full flex-col">
                     <div className="flex h-16 items-center border-b border-secondary-foreground/20 px-6">
-                        <h1 className="text-sm font-bold tracking-tight"><span className={"font-black"}>RUGI-AUTH</span>
-                            <span className={"font-light"}>DASHBOARD</span></h1>
+                        <h1 className="text-sm font-bold tracking-tight uppercase truncate">
+                            <span className={"font-black"}>{projectName}</span>
+                            <span className={"font-light ml-1"}>DASHBOARD</span>
+                        </h1>
                     </div>
                     <nav className="flex-1 space-y-1 px-3 py-4">
                         {navigation.map((item) => {
@@ -76,7 +88,7 @@ export function Sidebar() {
                                             : "text-secondary-foreground/80 hover:bg-primary/10 hover:text-primary-foreground"
                                     )}
                                 >
-                                    <item.icon className="h-5 w-5"/>
+                                    <item.icon className="h-5 w-5" />
                                     {item.name}
                                 </Link>
                             );

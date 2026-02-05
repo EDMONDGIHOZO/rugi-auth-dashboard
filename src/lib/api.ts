@@ -37,7 +37,7 @@ const API_BASE_URL =
 const createAxiosInstance = (
     options: { protected?: boolean } = {}
 ): AxiosInstance => {
-    const {protected: isProtected = false} = options;
+    const { protected: isProtected = false } = options;
 
     const instance = axios.create({
         baseURL: API_BASE_URL,
@@ -64,8 +64,8 @@ const createAxiosInstance = (
 };
 
 // Global instances to be reused across the app
-export const publicApi = createAxiosInstance({protected: false});
-export const protectedApi = createAxiosInstance({protected: true});
+export const publicApi = createAxiosInstance({ protected: false });
+export const protectedApi = createAxiosInstance({ protected: true });
 
 class ApiClient {
     private client: AxiosInstance;
@@ -196,7 +196,7 @@ class ApiClient {
     async revokeToken(): Promise<void> {
         const refreshToken = this.getRefreshToken();
         if (refreshToken) {
-            await this.client.post("/revoke", {refresh_token: refreshToken});
+            await this.client.post("/revoke", { refresh_token: refreshToken });
         }
         this.clearTokens();
     }
@@ -214,7 +214,7 @@ class ApiClient {
         type?: string;
     }): Promise<PaginatedResponse<App>> {
         const filteredParams =
-            params && typeof params.search !== "undefined" ? {...params} : params;
+            params && typeof params.search !== "undefined" ? { ...params } : params;
 
         if (filteredParams && filteredParams.search === "") {
             delete filteredParams.search;
@@ -279,7 +279,7 @@ class ApiClient {
         verified?: boolean;
         mfaEnabled?: boolean;
     }): Promise<PaginatedResponse<User>> {
-        const queryParams = params ? {...params} : undefined;
+        const queryParams = params ? { ...params } : undefined;
 
         if (queryParams?.search?.trim() === "") {
             delete queryParams.search;
@@ -350,7 +350,7 @@ class ApiClient {
     }): Promise<PaginatedResponse<AuditLog>> {
         const response = await this.client.get<PaginatedResponse<AuditLog>>(
             "/audit",
-            {params}
+            { params }
         );
         return response.data;
     }
@@ -383,7 +383,7 @@ class ApiClient {
     ): Promise<PaginatedResponse<AuthSettings>> {
         const response = await this.client.get<PaginatedResponse<AuthSettings>>(
             "/auth-settings",
-            {params}
+            { params }
         );
         return response.data;
     }
@@ -411,6 +411,16 @@ class ApiClient {
     ): Promise<EmailConfig> {
         console.log(data);
         const response = await this.client.patch<EmailConfig>(`/settings/email/${appId}`, data);
+        return response.data;
+    }
+
+    async getMeta(): Promise<{ projectName: string }> {
+        const response = await this.client.get<{ projectName: string }>("/meta");
+        return response.data;
+    }
+
+    async updateMeta(data: { projectName: string }): Promise<{ projectName: string }> {
+        const response = await this.client.patch<{ projectName: string }>("/meta", data);
         return response.data;
     }
 }
